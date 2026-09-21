@@ -9,13 +9,15 @@
   "mcpServers": {
     "devorbit": {
       "type": "streamable_http",
-      "url": "http://8.154.25.108:4174/mcp"
+      "url": "https://studio-rain777-devorbit.api-inference.modelscope.net/mcp"
     }
   }
 }
 ```
 
-> 直连地址无需鉴权，长期有效。Worker MCP 调用经身份代理注入 caller/caseId/traceId。
+> 直连地址：`http://8.154.25.108:4174/mcp`（本地环境，无需鉴权）
+> 魔搭托管地址：`https://studio-rain777-devorbit.api-inference.modelscope.net/mcp`（需 ModelScope Token 认证）
+> Worker MCP 调用经身份代理注入 caller/caseId/traceId
 
 ## 工具列表
 

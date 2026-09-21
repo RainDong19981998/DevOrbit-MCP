@@ -1,20 +1,35 @@
 # DevOrbit MCP Server
 
-> GOAI 2026 Agent Infra 决赛项目
+> 14 tools, dual protocol (2025-06-18 / 2025-11-25), case-scoped audit, identity proxy
 
-## 工具清单（14 个）
+## 服务配置
 
-| 分组 | 工具 | 调用者 |
-|---|---|---|
-| Issue | issue.fetch_signals | intake-worker |
-| Observability | observability.fetch_signals | intake/rca-worker |
-| Repository | repository.read_file | impact/rca/patch/verify/release-worker |
-| Repository | repository.create_workspace | patch-worker |
-| Repository | repository.write_file | patch-worker |
-| CI | ci.run_tests | patch/verify-worker |
-| Knowledge | knowledge.search_cases | rca-worker |
-| Knowledge | knowledge.write_case | learning-worker |
-| Release | release.canary | release-worker |
+```json
+{
+  "mcpServers": {
+    "devorbit": {
+      "type": "streamable_http",
+      "url": "http://8.154.25.108:4174/mcp"
+    }
+  }
+}
+```
+
+> 直连地址无需鉴权，长期有效。Worker MCP 调用经身份代理注入 caller/caseId/traceId。
+
+## 工具列表
+
+| 工具 | 说明 |
+|------|------|
+| `issue.fetch_signals` | 从 Issue 系统拉取故障信号（intake-worker） |
+| `observability.fetch_signals` | 从可观测平台拉取指标/日志/链路信号 |
+| `repository.read_file` | 读取代码仓库文件内容 |
+| `repository.create_workspace` | 创建隔离工作区 |
+| `repository.write_file` | 写入代码文件到工作区 |
+| `ci.run_tests` | 运行测试门禁 |
+| `knowledge.search_cases` | 搜索历史经验知识库 |
+| `knowledge.write_case` | 写入知识卡到经验库 |
+| `release.canary` | 灰度发布门禁检查 |
 
 ## 协议
 
@@ -30,5 +45,9 @@ R4 自主探针 passed：7/7 Worker 各自调用自有 MCP，69 条同 Case/Trac
 ## 文件
 
 - `schemas/` — MCP 工具 OpenAPI 定义
-- `src/mcp/` — HTTP transport + tool server 实现
-- `config/tool-policy.json` — Agent×Tool allowlist + case scope
+- `mcp/` — HTTP transport + tool server 实现
+- `tool-policy.json` — Agent×Tool allowlist + case scope
+
+## 许可证
+
+Apache-2.0
